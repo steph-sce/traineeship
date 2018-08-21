@@ -13,7 +13,9 @@ Plateforme de formation
 
 <img src="https://trello-attachments.s3.amazonaws.com/5b7b381dd66faa8edd7b5337/5b7b381e20ab3b86a30d8d0f/1fa57bf968ab4dff57abb8d829b9830e/diag.png"/>
 
-####Explications
+
+#### Explications
+
 1. Les nombres sont tous unsigned, car il n'y a pas besoin de stocker des nombres négatifs
 2. Dans la table posts:  
    * les champs title et description sont requis
