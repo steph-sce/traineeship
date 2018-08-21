@@ -1,9 +1,27 @@
-# projet final ecole multimedia
+# Projet final Ecole multimédia
 
-## diagramme de la base de données
+Plateforme de formation
+
+
+
+### Technos utilisées :
+
+![laravel](https://cdn4.iconfinder.com/data/icons/logos-3/256/laravel-128.png)
+
+## Diagramme de la base de données
 
 
 <img src="https://trello-attachments.s3.amazonaws.com/5b7b381dd66faa8edd7b5337/5b7b381e20ab3b86a30d8d0f/1fa57bf968ab4dff57abb8d829b9830e/diag.png"/>
+
+####Explications
+1. Les nombres sont tous unsigned, car il n'y a pas besoin de stocker des nombres négatifs
+2. Dans la table posts:  
+   * les champs title et description sont requis
+   * le champ post_type est un enum de 'formation' et 'stage'
+   * le status sera 'draft' par défaut
+   * les autres champs sont nullable (pour pouvoir sauvegarder l'item en 'draft')
+   
+  3. La table category_post est crée afin d'anticiper une potentielle relation N:N si une évolution permettait qu'un post soit relié à plusieurs catégories plutôt qu'une au plus
 
 
 
