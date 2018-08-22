@@ -1,6 +1,8 @@
 /node_modules
 /public/hot
 /public/storage
+/public/images
+/public/js/konami.js
 /storage/*.key
 /vendor
 /docs
@@ -12,4 +14,4 @@ Homestead.yaml
 npm-debug.log
 yarn-error.log
 .env
-public/images
+

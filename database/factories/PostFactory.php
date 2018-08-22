@@ -7,13 +7,13 @@ $factory->define(App\Post::class, function (Faker $faker) {
     $statusValues = ['draft', 'published'];
     $startDay = rand(1, 28);
     return [
-        'post_type' => $typeValues[rand(0,1)],
+        'post_type' => $faker->randomElement($typeValues),
         'title' => $faker->sentence(3),
         'description' => $faker->sentence(25),
-        'start_date' => null,
-        'end_date' => null,
+        'start_date' =>$faker->dateTimeInInterval("+" .$startDay . " days"),
+        'end_date' => $faker->dateTimeInInterval("+" .$startDay + 7 . " days"),
         'price' => $faker->numberBetween(99, 9999),
         'max_students' => $faker->numberBetween(10, 100),
-        'status' => $statusValues[rand(0,1)]
+        'status' => $faker->randomElement($statusValues)
     ];
 });
