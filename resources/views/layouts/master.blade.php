@@ -15,9 +15,9 @@
 
 <body>
 
-<div class="container-fluid p-0">
+<div class="container-fluid">
     @include('partials.menu')
-    <main class="row py-4">
+    <main class="row">
         <div class="col-md-8">
             @yield('content')
         </div>
