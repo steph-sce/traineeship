@@ -18,13 +18,11 @@
 <div class="container-fluid">
     @include('partials.menu')
     <main class="row mt-3">
-        <div class="col-md-8">
+        <div class="{{$sidebar === false ? "col-md-12" : "col-md-8"}}">
             @yield('content')
         </div>
-        <div class="col-md-4">
-            {{--  include conditionnel    si le partial existe il s'inclue sinon rien ne se passe (pas d'erreur)    include conditionnel --}}
-            @includeIf('partials.sidebar')
-        </div>
+              {{--include conditionnel    si le partial existe il s'inclue sinon rien ne se passe (pas d'erreur)    include conditionnel--}}
+            @includeWhen($sidebar, 'partials.sidebar')
     </main>
 </div>
 
