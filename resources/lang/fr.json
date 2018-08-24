@@ -17,7 +17,9 @@
   "Dashboard" : "Tableau de bord",
   "You are logged in!" : "Vous êtes connecté !",
   "Description" : "Description",
+  "Max students" : "Nombre max d'étudiants",
   "Your message" : "Votre message",
+  "Type your message..." : "Tapez votre message...",
   "Start date" : "Date de début",
   "End date": "Date de fin",
   "$" : "€"
