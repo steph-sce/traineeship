@@ -17,7 +17,7 @@
 
 <div class="container-fluid">
     @include('partials.menu')
-    <main class="row">
+    <main class="row mt-3">
         <div class="col-md-8">
             @yield('content')
         </div>

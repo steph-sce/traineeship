@@ -12,6 +12,9 @@
 */
 
 Route::get('/', 'FrontController@index')->name('index');
+Route::get('/stages', 'FrontController@showStages')->name('stages');
+Route::get('/formations', 'FrontController@showFormations')->name('formations');
+Route::get('/contact', 'FrontController@contact')->name('contact');
 
 Route::resource('admin/post', 'PostController');
 

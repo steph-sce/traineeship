@@ -2,10 +2,14 @@
 
 @section('content')
 
+    {{$posts->links()}}
+
     @forelse($posts as $post)
         @include('front.partials.postCard')
     @empty
-        Aucune formation n'est encore mise en ligne
+        Aucune formation correspondante au filtre selectionné n'a été publiée
     @endforelse
 
+
+    {{$posts->links()}}
 @endsection

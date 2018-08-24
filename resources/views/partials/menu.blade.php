@@ -8,9 +8,9 @@
             <!-- Left Side Of Navbar -->
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item"><a href="" class="nav-link">Accueil</a></li>
-                <li class="nav-item"><a href="" class="nav-link">Stage</a></li>
-                <li class="nav-item"><a href="" class="nav-link">Formations</a></li>
-                <li class="nav-item"><a href="" class="nav-link">Contact</a></li>
+                <li class="nav-item"><a href="{{route('stages')}}" class="nav-link">Stages</a></li>
+                <li class="nav-item"><a href="{{route('formations')}}" class="nav-link">Formations</a></li>
+                <li class="nav-item"><a href="{{route('contact')}}" class="nav-link">Contact</a></li>
 
             </ul>
 
