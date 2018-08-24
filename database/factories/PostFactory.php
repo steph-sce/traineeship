@@ -12,7 +12,7 @@ $factory->define(App\Post::class, function (Faker $faker) {
         'description' => $faker->sentence(25),
         'start_date' =>$faker->dateTimeInInterval("+" .$startDay . " days"),
         'end_date' => $faker->dateTimeInInterval("+" .$startDay + 7 . " days"),
-        'price' => $faker->numberBetween(99, 9999),
+        'price' => $faker->randomFloat(2,99.99, 9999.99),
         'max_students' => $faker->numberBetween(10, 100),
         'status' => $faker->randomElement($statusValues)
     ];
