@@ -13,6 +13,11 @@ class FrontController extends Controller
         return view('front.index', ['posts' => $posts]);
     }
 
+    public function show(Post $post)
+    {
+        return view('front.show', ['post' => $post]);
+    }
+
     public function showStages()
     {
         $posts = Post::stage()->orderBy('start_date', 'ASC')->paginate(5);

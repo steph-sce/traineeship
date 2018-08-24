@@ -12,6 +12,7 @@
 */
 
 Route::get('/', 'FrontController@index')->name('index');
+Route::get('/post/{post}', 'FrontController@show')->where(['post', '[0-9]+'])->name('show');
 Route::get('/stages', 'FrontController@showStages')->name('stages');
 Route::get('/formations', 'FrontController@showFormations')->name('formations');
 Route::get('/contact', 'FrontController@contact')->name('contact');
