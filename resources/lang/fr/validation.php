@@ -163,5 +163,6 @@ return [
         'time'                  => 'heure',
         'available'             => 'disponible',
         'size'                  => 'taille',
+        'post_type'             => 'type de post'
     ],
 ];

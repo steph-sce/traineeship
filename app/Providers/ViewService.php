@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Route;
+use Illuminate\Support\Facades\Auth;
 
 class ViewService extends ServiceProvider
 {
@@ -19,6 +20,12 @@ class ViewService extends ServiceProvider
             if(Route::is(['show', 'post.*', 'contact'])) $sidebar = false;
 
             $view->with('sidebar', $sidebar);
+        });
+
+        view()->composer(['partials.menu'], function($view) {
+            $types = true;
+            if (Auth::check() === true) $types = false;
+           $view->with('types', $types);
         });
     }
 

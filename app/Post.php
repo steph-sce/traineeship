@@ -11,6 +11,20 @@ class Post extends Model
     'start_date' => 'datetime:d-m-Y',
     'end_date' => 'datetime:d-m-Y'
 ];
+    protected $fillable = [
+        'title',
+        'description',
+        'post_type',
+        'start_date',
+        'end_date',
+        'price',
+        'max_students',
+        'status'
+    ];
+
+
+
+    // --------------------  Relations  --------------------
     public function categories()
     {
         return $this->belongsToMany(Category::class);
@@ -20,6 +34,31 @@ class Post extends Model
     {
         return $this->hasOne(Picture::class);
     }
+
+
+    // -------------------- Getters --------------------
+
+    public function getStatusAttribute($value)
+    {
+        return __(ucfirst($value));
+    }
+
+    public function getPostTypeAttribute($value)
+    {
+        return ucfirst($value);
+    }
+
+/*    public function getStartDateAttribute($value)
+    {
+        return (new \DateTime($value))->format('d-m-Y');
+    }
+
+    public function getEndDateAttribute($value)
+    {
+        return (new \DateTime($value))->format('d-m-Y');
+    }*/
+
+    // --------------------  Scopes --------------------
 
     public function scopeClosest($query)
     {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Post;
 use Illuminate\Http\Request;
+use App\Http\Requests\StorePost;
 
 class PostController extends Controller
 {
@@ -14,7 +15,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        return view('back.index');
+        $posts = Post::paginate(10);
+        return view('back.index', ['posts' => $posts]);
     }
 
     /**
@@ -24,7 +26,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('back.create');
     }
 
     /**
@@ -33,9 +35,20 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StorePost $request)
     {
-        //
+
+        $post = Post::create($request->all());
+        $file = $request->picture;
+
+        if(!empty($file)) {
+            $link = $request->file('picture')->store('images');
+            $this->savePicture($post, $link);
+        }
+
+        $post->save();
+        return redirect()->route('post.index')->with('success', 'Le post a bien été crée');
+//        dd($request->validated());
     }
 
     /**
@@ -81,5 +94,13 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         //
+    }
+
+    private function savePicture(Post $post, $link)
+    {
+        $post->picture()->create([
+            'link' => $link,
+            'title' => $request->img_title ?? "No title"
+        ]);
     }
 }
