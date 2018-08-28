@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Route;
 
 class Post extends Model
 {
@@ -40,6 +41,7 @@ class Post extends Model
 
     public function getStatusAttribute($value)
     {
+        if(Route::is('post.edit')) return $value;
         return __(ucfirst($value));
     }
 
@@ -68,6 +70,21 @@ class Post extends Model
     public function scopePublished($query)
     {
         return $query->where('status', '=', 'published');
+    }
+
+    public function scopeDraft($query)
+    {
+        return $query->where('status', '=', 'draft');
+    }
+
+    public function scopeTrash($query)
+    {
+        return $query->where('status', '=', 'trash');
+    }
+
+    public function scopeNotTrash($query)
+    {
+        return $query->where('status', '!=', 'trash');
     }
 
     public function scopeStage($query)

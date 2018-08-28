@@ -16,7 +16,7 @@
 
         <div class="form-group">
             <label for="description">{{ __('Description') . ": " }}</label>
-            <textarea class="form-control" name="description" id="description" cols="30" rows="10"></textarea>
+            <textarea class="form-control" name="description" id="description" cols="30" rows="10">{{ old('description') }}</textarea>
             @if($errors->has('description'))
                 <div class="alert alert-danger mt-1">{{$errors->first('description')}}</div>
             @endif
@@ -26,8 +26,8 @@
             <label for="post_type">{{ __('Post type') . ": " }}</label>
             <select class="form-control" name="post_type" id="post_type">
                 <option value="">{{ __('Select post type') }}</option>
-                <option value="stage">Stage</option>
-                <option value="formation">Formation</option>
+                <option value="stage" {{ old('post_type') === 'stage' ? "selected" : ""  }}>Stage</option>
+                <option value="formation" {{ old('post_type') === 'formation' ? "selected" : "" }}>Formation</option>
             </select>
             @if($errors->has('post_type'))
                 <div class="alert alert-danger mt-1">{{$errors->first('post_type')}}</div>
@@ -36,7 +36,7 @@
 
         <div class="form-group">
             <label for="start_date">{{ __('Start date') . ": " }}</label>
-            <input class="form-control" type="date" name="start_date" id="start_date">
+            <input class="form-control" type="date" name="start_date" id="start_date" value="{{ old('start_date') }}">
             @if($errors->has('start_date'))
                 <div class="alert alert-danger mt-1">{{$errors->first('start_date')}}</div>
             @endif
@@ -44,7 +44,7 @@
 
         <div class="form-group">
             <label for="end_date">{{ __('End date') . ": " }}</label>
-            <input class="form-control" type="date" name="end_date" id="end_date">
+            <input class="form-control" type="date" name="end_date" id="end_date" value="{{ old('end_date') }}">
             @if($errors->has('end_date'))
                 <div class="alert alert-danger mt-1">{{$errors->first('end_date')}}</div>
             @endif
@@ -52,7 +52,7 @@
 
         <div class="form-group">
             <label for="price">{{ __('Price') . ": " }}</label>
-            <input type="number" class="form-control" min="0" max="99999.99" step="0.01" name="price" id="price">
+            <input type="number" class="form-control" min="0" max="99999.99" step="0.01" name="price" id="price" value="{{ old('price') }}">
             @if($errors->has('price'))
                 <div class="alert alert-danger mt-1">{{$errors->first('price')}}</div>
             @endif
@@ -60,7 +60,7 @@
 
         <div class="form-group">
             <label for="max_students">{{ __('Max students') . ": " }}</label>
-            <input type="number" class="form-control" min="0" max="65535" step="1" name="max_students" id="max_students">
+            <input type="number" class="form-control" min="0" max="65535" step="1" name="max_students" id="max_students" value="{{ old('max_students') }}">
             @if($errors->has('max_students'))
                 <div class="alert alert-danger mt-1">{{$errors->first('max_students')}}</div>
             @endif
@@ -69,8 +69,8 @@
         <div class="form-group">
             <label for="status">{{ __('Status') .": " }}</label>
             <select name="status" id="status" class="form-control">
-                <option value="draft">{{ __('Draft')}}</option>
-                <option value="published">{{ __('Published') }}</option>
+                <option value="draft" {{ old('status') === "draft" ? "selected" : "" }}>{{ __('Draft')}}</option>
+                <option value="published" {{ old('status') === "published" ? "selected" : "" }}>{{ __('Published') }}</option>
             </select>
             @if($errors->has('status'))
                 <div class="alert alert-danger mt-1">{{$errors->first('status')}}</div>
@@ -87,17 +87,3 @@
     </form>
 
 @endsection
-
-{{--@section('scripts')
-    @parent
-    <script>
-        document.addEventListener('keydown', function(e) {
-
-            if(e.ctrlKey && e.keyCode === 83) {
-                e.preventDefault();
-                console.log('Ctrl + s pressé');
-            }
-        })
-    </script>
-
-@endsection--}}

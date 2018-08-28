@@ -17,7 +17,10 @@ Route::get('/stages', 'FrontController@showStages')->name('stages');
 Route::get('/formations', 'FrontController@showFormations')->name('formations');
 Route::get('/contact', 'FrontController@contact')->name('contact');
 
-Route::resource('admin/post', 'PostController');
+Route::resource('admin/post', 'PostController')->middleware('auth');
+
+Route::get('admin/post/trash/{post}', 'PostController@setTrash')->name('trash');
+Route::get('admin/trash', 'PostController@showTrash')->name('showTrash');
 
 Auth::routes();
 

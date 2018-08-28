@@ -15,7 +15,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::paginate(10);
+        $posts = Post::notTrash()->paginate(10);
         return view('back.index', ['posts' => $posts]);
     }
 
@@ -70,7 +70,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        return view('back.edit', ['post' => $post]);
     }
 
     /**
@@ -80,9 +80,34 @@ class PostController extends Controller
      * @param  \App\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(StorePost $request, Post $post)
     {
-        //
+        $post->update($request->all());
+        return redirect()->route('post.index')->with('success', __('Post has been updated !'));
+    }
+
+
+    /**
+     * Set the status of the specified resource to trash.
+     *
+     * @param  \App\Post  $post
+     * @return \Illuminate\Http\Response
+     */
+
+
+    public function setTrash(Post $post)
+    {
+        $post->update([
+            'status' => 'trash'
+        ]);
+        return redirect()->route('post.index')->with('success', __('Post has been trashed !'));
+    }
+
+
+    public function showTrash()
+    {
+        $posts = Post::trash()->paginate(10);
+        return view('back.trash');
     }
 
     /**
