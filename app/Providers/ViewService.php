@@ -27,6 +27,13 @@ class ViewService extends ServiceProvider
             if (Auth::check() === true) $types = false;
            $view->with('types', $types);
         });
+
+
+        view()->composer(['front.partials.postCard'], function($view) {
+            $details = false;
+            if(Route::is(['show'])) $details = true;
+            $view->with('details', $details);
+        });
     }
 
     /**

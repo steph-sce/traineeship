@@ -30,7 +30,7 @@ class PostTableSeeder extends Seeder
 
         factory(App\Post::class, 20)->create()->each(function($post){
             $link = str_random(12) . '.jpg';
-            $file = file_get_contents('https://picsum.photos/250/250?image=' . rand(1,40));
+            $file = file_get_contents('https://picsum.photos/2500/2500?image=' . rand(1,40));
             Storage::disk('local')->put($link, $file);
 
 
