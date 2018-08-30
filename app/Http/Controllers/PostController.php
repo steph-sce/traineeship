@@ -107,7 +107,7 @@ class PostController extends Controller
     public function showTrash()
     {
         $posts = Post::trash()->paginate(10);
-        return view('back.trash');
+        return view('back.trash', ['posts' => $posts]);
     }
 
     /**

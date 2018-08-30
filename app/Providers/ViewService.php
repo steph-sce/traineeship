@@ -17,7 +17,7 @@ class ViewService extends ServiceProvider
     {
         view()->composer(['layouts.master'], function($view){
             $sidebar = true;
-            if(Route::is(['show', 'post.*', 'contact'])) $sidebar = false;
+            if(Route::is(['show', 'post.*', 'contact', 'showTrash'])) $sidebar = false;
 
             $view->with('sidebar', $sidebar);
         });

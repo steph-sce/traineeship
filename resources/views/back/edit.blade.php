@@ -86,7 +86,7 @@
 
                 </div>
                 <p class="alert alert-info">{{ __('Saved picture') }}</p>
-                <img src="{{ asset('images/' .$post->picture->link) }}" alt="">
+                <img class="img-responsive col-md-3" src="{{ asset('images/' .$post->picture->link) }}" alt="">
             @endif
         </div>
 
