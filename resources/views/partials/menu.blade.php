@@ -1,48 +1,46 @@
-<nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-laravel">
-    <div class="container-fluid">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+<nav class="nav-center row grey darken-4">
+    <div class="nav-wrapper">
+        <a href="#" data-target="burger-menu" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <!-- Left Side Of Navbar -->
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item"><a href="{{route('index')}}" class="nav-link">Accueil</a></li>
-                @if($types === true)
-                    <li class="nav-item"><a href="{{route('stages')}}" class="nav-link">Stages</a></li>
-                    <li class="nav-item"><a href="{{route('formations')}}" class="nav-link">Formations</a></li>
-                    <li class="nav-item"><a href="{{route('contact')}}" class="nav-link">Contact</a></li>
-                @endif
-
-            </ul>
-
-            <!-- Right Side Of Navbar -->
-            <ul class="navbar-nav ml-auto">
-                <!-- Authentication Links -->
-                @guest
-                @else
-                    <li class="nav-item">
-                        <a href="{{route('post.index')}}" class="nav-link">{{__('Dashboard')}}</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            {{ ucfirst(Auth::user()->name) }} <span class="caret"></span>
-                        </a>
-
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ route('logout') }}"
-                               onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                {{ __('Logout') }}
-                            </a>
-
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                @csrf
-                            </form>
-                        </div>
-                    </li>
-                @endguest
-            </ul>
+        <ul class="col s8 offset-s2 hide-on-med-and-down">
+            <li class="white-text {{ $types === false ? "left" : "" }}"><a class="{{ $active === "index" ? "active" : "" }}" href="{{route('index')}}">Accueil</a></li>
+            @if($types === true)
+                <li class="white-text"><a class="{{ $active === "stages" ? "active" : "" }}" href="{{route('stages')}}">Stages</a></li>
+                <li class="white-text"><a class="{{ $active === "formations" ? "active" : "" }}" href="{{route('formations')}}">Formations</a></li>
+                <li class="white-text"><a class="{{ $active === "contact" ? "active" : "" }}" href="{{route('contact')}}">Contact</a></li>
+            @endif
+            @guest
+            @else
+                <li class="white-text right">
+                    <a href="#"onclick="event.preventDefault();document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
+                </li>
+                <li class="white-text right">
+                    <a class="{{ $active === "dashboard" ? "active" : "" }}"href="{{ route('post.index') }}">{{ __('Dashboard') }}</a>
+                </li>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
+            @endguest
+        </ul>
+        <div id="search-container"class="input-field col s2">
+            <input id="search" type="search">
+            <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+            <i class="material-icons">close</i>
         </div>
+        {{-- .input-field  --}}
     </div>
+    {{-- .nav-wrapper--}}
+
 </nav>
+
+<ul class="sidenav" id="burger-menu">
+    <li class="white-text"><a href="{{route('index')}}">Accueil</a></li>
+    @if($types === true)
+        <li class="white-text"><a href="{{route('stages')}}">Stages</a></li>
+        <li class="white-text"><a href="{{route('formations')}}">Formations</a></li>
+        <li class="white-text"><a href="{{route('contact')}}">Contact</a></li>
+    @endif
+
+</ul>
+
+

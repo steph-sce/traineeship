@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Route;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ViewService extends ServiceProvider
@@ -23,9 +24,27 @@ class ViewService extends ServiceProvider
         });
 
         view()->composer(['partials.menu'], function($view) {
+            switch(request()->route()->uri) {
+                default :
+                    $active = null;
+                    break;
+                case "/":
+                    $active = "index";
+                    break;
+                case "contact":
+                    $active = "contact";
+                    break;
+                case "stages" :
+                    $active = "stages";
+                    break;
+                case "formations":
+                    $active = "formations";
+                    break;
+            }
             $types = true;
             if (Auth::check() === true) $types = false;
-           $view->with('types', $types);
+            if(Route::is('post.index')) $active = "dashboard";
+           $view->with(['types' => $types, 'active' => $active]);
         });
 
 

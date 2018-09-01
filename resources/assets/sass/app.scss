@@ -1,14 +1,64 @@
 
 // Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+//@import url('https://fonts.googleapis.com/css?family=Nunito');
 
 // Variables
-@import 'variables';
+//@import 'variables';
 
 // Bootstrap
-@import '~bootstrap/scss/bootstrap';
+//@import '~bootstrap/scss/bootstrap';
+@import '~materialize-css/sass/materialize.scss';
 
-.navbar-laravel {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+//.navbar-laravel {
+//  background-color: #fff;
+//  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+//}
+
+#search-container {
+  padding: 0;
+}
+
+.header-bg {
+  background: url("/img/Artboard.png") no-repeat;
+  background-attachment: fixed;
+  -webkit-background-size: 100%;
+  background-size: 100%;
+  width: 100%;
+}
+
+.header-logo {
+  margin: 4% auto;
+  width: 20%;
+}
+
+nav.nav-center ul {
+  text-align: center;
+}
+nav.nav-center ul li {
+  display: inline;
+  float: none;
+}
+nav.nav-center ul li a {
+  position: relative;
+  display: inline-block;
+}
+
+nav.nav-center ul li a.active:after{
+  width: 0;
+  height: 0;
+  position: absolute;
+  content:"";
+  display:block;
+/* Ads an arrow effect exploiting the way that browsers join borders together */
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid #c3c622;
+/* centers relative to parent */
+  left: 50%;
+  top:0;
+/* Compensates for width of border (arrow) */
+  margin-left: -8px;
+}
+nav.nav-center ul li a:hover, nav.nav-center ul li a.active {
+  color : #c3c622;
 }
