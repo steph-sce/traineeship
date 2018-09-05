@@ -50,8 +50,16 @@ class ViewService extends ServiceProvider
 
         view()->composer(['front.partials.postCard'], function($view) {
             $details = false;
+
             if(Route::is(['show'])) $details = true;
-            $view->with('details', $details);
+            $view->with([ 'details' => $details]);
+        });
+
+
+        view()->composer(['front.show'], function($view) {
+            $backlink = null;
+            if(Route::is('show'))  $backlink = strtolower(request()->route()->parameters["post"]->post_type) . "s";
+            $view->with(['backlink' => $backlink]);
         });
     }
 

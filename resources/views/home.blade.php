@@ -1,20 +1,20 @@
-@extends('layouts.app')
+@extends('layouts.master')
 
 @section('content')
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
+    <div class="mt2 row center">
+        <div class="col s12 m8">
             <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+                <div class="card-header"><a class="lime-text" href="{{ route('post.index') }}">{{ __('Dashboard') }}</a></div>
 
-                <div class="card-body">
+                <div class="card-content">
                     @if (session('status'))
                         <div class="alert alert-success" role="alert">
                             {{ session('status') }}
                         </div>
                     @endif
 
-                    {{ __('You are logged in!') }}
+                    <p>{{ __('You are logged in!') }}</p>
                     <p class="mt-2">Bienvenue {{Auth::user()->name}}</p>
                 </div>
             </div>

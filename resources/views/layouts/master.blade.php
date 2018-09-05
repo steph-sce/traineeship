@@ -9,9 +9,10 @@
     <title>Plateforme d'apprentissage</title>
     <link href="{{asset('css/app.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('css/main.css')}}">
-    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
+    {{--<link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">--}}
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet">
     {{--<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">--}}
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    {{--<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">--}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@7.26.10/dist/sweetalert2.min.css">
 </head>
 
@@ -22,7 +23,7 @@
     </div>
 </header>
 
-<div class="container-fluid">
+
     @include('partials.menu')
     <main class="row container">
         {{--<div class="col s12">
@@ -36,7 +37,6 @@
             @includeWhen($sidebar, 'partials.sidebar')
         </div>--}}
     </main>
-</div>
 
 
 @section('scripts')
@@ -48,6 +48,10 @@
         $(document).ready(function(){
             $('.sidenav').sidenav();
         });
+
+        $('.close').on('click', function() {
+            $('#search').val('');
+        })
     </script>
     @show
 </body>

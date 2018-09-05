@@ -2,6 +2,7 @@
 
 @section('content')
 
+
     {{$posts->links()}}
 
     @forelse($posts as $post)

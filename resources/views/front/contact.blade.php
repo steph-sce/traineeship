@@ -2,11 +2,11 @@
 
 @section('content')
 
-    <form class="col s6 offset-s3" id="contact-form" action="{{ route('sendContactMail') }}" method="POST">
+    <form class="mt2 col s12 l6 offset-l3" id="contact-form" action="{{ route('sendContactMail') }}" method="POST">
         @csrf
         <div class="row">
             <div class="input-field col s12">
-                <input name="email" id="email" type="email" class="validate" placeholder="{{ __('E-Mail Address') }}" value="{{ old('email') }}" required>
+                <input name="email" id="email" type="email" class="validate" placeholder="{{ __('E-Mail Address') }}" value="{{ old('email') }}" required autofocus>
                 <label class="active" for="email">{{ __('E-Mail Address') }}</label>
                 @if(Session::has('errors'))
                     <span class="helper-text" data-error="{{ $errors->first('email') }}"></span>
@@ -22,7 +22,9 @@
                 @endif
             </div>
         </div>
-        <input type="submit" class="btn lime" value="{{ __('Submit') }}">
+        <div class="center">
+            <button class="waves-effect waves-light btn lime darken-1" type="submit">{{ __('Submit') }}</button>
+        </div>
     </form>
 @endsection
 
