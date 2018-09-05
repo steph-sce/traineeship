@@ -13,7 +13,7 @@ return [
     'accepted'             => 'Le champ :attribute doit être accepté.',
     'active_url'           => "Le champ :attribute n'est pas une URL valide.",
     'after'                => 'Le champ :attribute doit être une date postérieure au :date.',
-    'after_or_equal'       => 'Le champ :attribute doit être une date postérieure ou égale au :date.',
+    'after_or_equal'       => 'Le champ :attribute doit être une date postérieure ou égale au champ :date.',
     'alpha'                => 'Le champ :attribute doit contenir uniquement des lettres.',
     'alpha_dash'           => 'Le champ :attribute doit contenir uniquement des lettres, des chiffres et des tirets.',
     'alpha_num'            => 'Le champ :attribute doit contenir uniquement des chiffres et des lettres.',
@@ -163,6 +163,11 @@ return [
         'time'                  => 'heure',
         'available'             => 'disponible',
         'size'                  => 'taille',
-        'post_type'             => 'type de post'
+        'post_type'             => 'type de post',
+        'end_date'              => 'date de fin',
+        'start_date'            => 'date de début',
+        'price'                 => 'prix',
+        'max_students'          => 'nombre max d\'étudiants',
+        'picture'               => 'image'
     ],
 ];

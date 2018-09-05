@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Post;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePost;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -15,7 +16,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::notTrash()->paginate(10);
+        $posts = Post::notTrash()->orderBy('id', 'ASC')->paginate(10);
         return view('back.index', ['posts' => $posts]);
     }
 
@@ -82,7 +83,23 @@ class PostController extends Controller
      */
     public function update(StorePost $request, Post $post)
     {
-        $post->update($request->all());
+        $start_date = \DateTime::createFromFormat('d-m-Y', $request->input('start_date'));
+        $end_date = \DateTime::createFromFormat('d-m-Y', $request->input('end_date'));
+        $post->title = $request->input('title');
+        $post->description = $request->input('description');
+        $post->post_type = $request->input('post_type');
+        $post->start_date = $start_date;
+        $post->end_date = $end_date;
+        $post->price = $request->input('price');
+        $post->max_students = $request->input('max_students');
+        $post->status = $request->input('status');
+        $file = $request->picture;
+
+        if(!empty($file)) {
+            $link = $request->file('picture')->store('/');
+            $this->savePicture($post, $link);
+        }
+        $post->save();
         return redirect()->route('post.index')->with('success', __('Post has been updated !'));
     }
 
@@ -100,7 +117,7 @@ class PostController extends Controller
         $post->update([
             'status' => 'trash'
         ]);
-        return redirect()->route('post.index')->with('success', __('Post has been trashed !'));
+        return redirect()->route('post.index')->with('success', __('Post have been trashed !'));
     }
 
 
@@ -118,11 +135,16 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        return redirect()->route('showTrash')->with('success', __('Post has been deleted !'));
     }
 
     private function savePicture(Post $post, $link)
     {
+        if(count($post->picture) > 0) {
+            Storage::disk('local')->delete($post->picture->link);
+            $post->picture()->delete();
+        }
         $post->picture()->create([
             'link' => $link,
             'title' => $request->img_title ?? "No title"

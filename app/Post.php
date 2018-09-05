@@ -24,6 +24,20 @@ class Post extends Model
     ];
 
 
+    // Helpers
+
+    public function getDiffDate() {
+        $diff = date_diff($this->start_date, $this->end_date);
+        if($diff->m === 0) {
+            if($diff->days === 0) {
+                return "1 jour";
+            }
+            return $diff->days . " jours";
+        }
+        return $diff->m . " mois";
+    }
+
+
 
     // --------------------  Relations  --------------------
     public function categories()
@@ -48,6 +62,15 @@ class Post extends Model
     public function getPostTypeAttribute($value)
     {
         return ucfirst($value);
+    }
+
+    public function getDescriptionAttribute($value) {
+        if(Route::is(['index', 'stages', 'formations'])) {
+            if(strlen($value) > 120) {
+                return substr($value, 0, 120) . "...";
+            }
+        }
+        return $value;
     }
 
 /*    public function getStartDateAttribute($value)

@@ -32,6 +32,7 @@ Route::post('/contact', 'MailController@sendContactMail')->name('sendContactMail
 // ------------- Routes du back -------------
 Route::resource('admin/post', 'PostController')->middleware('auth');
 Route::get('admin/post/trash/{post}', 'PostController@setTrash')->middleware('auth')->name('trash');
+Route::get('admin/post/draft/{post}', 'PostController@setDraft')->middleware('auth')->name('draft');
 Route::get('admin/trash', 'PostController@showTrash')->middleware('auth')->name('showTrash');
 // ------------------------------------------
 

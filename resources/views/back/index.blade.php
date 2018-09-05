@@ -1,18 +1,18 @@
 @extends('layouts.master')
 
 @section('content')
-        <a href="{{route('post.create')}}" class="btn btn-success my-5">{{__('Create new post')}}</a>
+        <a href="{{route('post.create')}}" class="btn lime darken-1">{{__('Create new post')}}</a>
     {{ $posts->links() }}
-    <table class="table table-hover table-striped my-5">
+    <table class="highlight">
         <thead>
         <tr>
             <th scope="col">Id</th>
             <th scope="col">{{ __('Type') }}</th>
             <th scope="col">{{ __('Title') }}</th>
-            <th scope="col" class="d-none d-md-table-cell">{{ __('Start date') }}</th>
-            <th scope="col" class="d-none d-md-table-cell">{{ __('End date') }}</th>
+            <th scope="col" class="hide-on-small-only">{{ __('Start date') }}</th>
+            <th scope="col" class="hide-on-small-only">{{ __('End date') }}</th>
             <th scope="col">{{ __('Status') }}</th>
-            <th scope="col" class="text-center">{{ __('Actions') }}</th>
+            <th scope="col" class="center">{{ __('Actions') }}</th>
         </tr>
         </thead>
         <tbody>
@@ -21,12 +21,14 @@
                 <th scope="row">{{ $post->id }}</th>
                 <td>{{ $post->post_type }}</td>
                 <td><a href="{{ route('show', $post->id) }}">{{ $post->title }}</a></td>
-                <td class="d-none d-md-table-cell">{{ $post->start_date->format(__('Y-m-d')) }}</td>
-                <td class="d-none d-md-table-cell">{{ $post->end_date->format(__('Y-m-d')) }}</td>
+                <td class="hide-on-small-only">{{ $post->start_date->format(__('Y-m-d')) }}</td>
+                <td class="hide-on-small-only">{{ $post->end_date->format(__('Y-m-d')) }}</td>
                 <td>{{ $post->status }}</td>
-                <td class="text-center">
-                    <a href="{{route('post.edit', $post->id)}}"><i class="mx-2 fas fa-edit fa-lg edit-item"></i></a>
-                    <a href="{{route('trash', $post->id)}}"><i class="mx-2 far fa-trash-alt fa-lg delete-item"></i></a>
+                <td class="center">
+                    <a href="{{ route('post.edit', $post) }}" class="btn action-button hide-on-med-and-down"><i class="material-icons">edit</i>{{ __('Edit') }}</a>
+                    <a href="{{ route('trash', $post) }}" class="btn red action-button hide-on-med-and-down"><i class="material-icons">delete_forever</i> {{ __('Trash') }}</a>
+                    <a href="{{ route('post.edit', $post) }}" class="btn-floating btn action-button show-on-medium-and-down hide-on-large-only mt1"><i class="material-icons">edit</i></a>
+                    <a href="{{ route('trash', $post) }}" class="btn-floating btn red action-button show-on-medium-and-down hide-on-large-only mt1"><i class="material-icons">delete_forever</i></a>
 
                 </td>
             </tr>
@@ -38,9 +40,11 @@
 
     {{ $posts->links() }}
 
-    <div class="my-5 trash-container">
-        <a href="{{route('showTrash')}}"><i class="trash-store fas fa-trash-alt fa-8x"></i></a>
-    </div>
+        <div class="fixed-action-btn hide-on-med-and-down">
+            <a href="{{ route('showTrash') }}" class="btn-floating btn-large red">
+                <i class="material-icons">delete</i>
+            </a>
+        </div>
 
 @endsection
 
@@ -52,7 +56,7 @@
         </script>
     @endif
     <script>
-        $(document).on('click', '.clikable-row td:not(.text-center)', function() {
+        $(document).on('click', '.clikable-row td:not(.center)', function() {
             window.location.href = $(this).parent('tr').data('href')
         })
         $(document).on('click', '.delete-item', function() {

@@ -29,7 +29,7 @@ class StorePost extends FormRequest
             'description' => 'required|min:5',
             'post_type' => 'required|' . Rule::in(['formation', 'stage']),
             'start_date' => 'date|nullable',
-            'end_date' => 'date|nullable',
+            'end_date' => 'after_or_equal:start_date|nullable',
             'price' => 'numeric|nullable',
             'max_students' => 'numeric|nullable',
             'status' => Rule::in(['draft', 'published', 'trash']),
