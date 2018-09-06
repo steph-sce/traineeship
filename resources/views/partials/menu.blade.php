@@ -22,7 +22,7 @@
                 </form>
             @endguest
         </ul>
-        <div id="search-container"class="input-field col s8 m2">
+        <div id="search-container" class="input-field col s8 m2">
             <input tabindex="7" id="search" type="search">
             <label class="label-icon" for="search"><i class="material-icons">search</i></label>
             <i class="material-icons close">close</i>
@@ -40,6 +40,18 @@
         <li class="white-text"><a href="{{route('formations')}}">Formations</a></li>
         <li class="white-text"><a href="{{route('contact')}}">Contact</a></li>
     @endif
+    @guest
+    @else
+        <li class="white-text">
+            <a href="#"onclick="event.preventDefault();document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
+        </li>
+        <li class="white-text">
+            <a href="{{ route('post.index') }}">{{ __('Dashboard') }}</a>
+        </li>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+        </form>
+    @endguest
 
 </ul>
 

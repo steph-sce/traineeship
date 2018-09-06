@@ -2,11 +2,11 @@
     <div class="center card-image col s12 m4">
         @if(count($post->picture) > 0)
             <img class="responsive-img" src="{{ asset('/images/'. $post->picture->link) }}" alt="{{ $post->picture->title }}">
-            <span id="postcard-title"class="card-title hide-on-med-and-up">{{ $post->title }}</span>
+            <span id="postcard-title" class="card-title hide-on-med-and-up">{{ $post->title }}</span>
+
             @else
             <img class="responsive-img" src="{{ asset('/img/no-picture.png') }}" alt="{{ __('No picture linked to this post') }}">
-            <span id="postcard-title"class="card-title hide-on-med-and-up">{{ $post->title }}</span>
-
+            <span id="postcard-title" class="card-title hide-on-med-and-up">{{ $post->title }}</span>
         @endif
         @if($details === true)
             <ul class="left-align browser-default hide-on-small-only">
