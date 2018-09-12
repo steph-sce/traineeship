@@ -1,10 +1,11 @@
 @extends('layouts.master')
-
 @section('content')
-    <a href="{{ route('post.index') }}" class="btn btn-info">{{ __('<< Back to dashboard') }}</a>
+    <div class="back-button-container">
+        <a href="{{ route('post.index') }}" class="text-lime back-button mt2">{{ __('Back to dashboard') }}</a>
+    </div>
 
     @if(count($posts) > 0)
-    <table class="table my-5">
+    <table class="table mt2">
         <thead>
             <tr>
                 <td scope="col">Id</td>
@@ -25,10 +26,10 @@
                 <td class="hide-on-small-only">{{ $post->end_date->format(__('Y-m-d')) }}</td>
                 <td class="center">
                     <a class="btn-floating" href="{{ route('draft', $post) }}">
-                        <i class="large material-icons">undo</i>
+                        <i class="material-icons">undo</i>
                     </a>
-                    <a class="btn-floating red btn-large delete-item">
-                        <i class="large material-icons">delete_forever</i>
+                    <a class="btn-floating red delete-item">
+                        <i class="material-icons">delete_forever</i>
                     </a>
                     <form action="{{ route('post.destroy', $post) }}" method="post" class="hide">
                         @csrf
@@ -62,6 +63,10 @@
             $(this).next('form').submit();
             console.log($(this).next('form'));
         })
+
+        @if(Session::has('success'))
+            swal('{{Session::get('success')}}');
+        @endif
 
     </script>
 

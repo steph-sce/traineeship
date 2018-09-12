@@ -12,7 +12,7 @@
                         <div class="row">
                             <div class="input-field col s12">
                                 <label for="email" class="active">{{ __('E-Mail Address') }}</label>
-                                <input id="email" type="email" class="validate {{ $errors->has('email') ? ' invalid' : '' }}" name="email" value="{{ old('email') }}" required autofocus>
+                                <input id="email" type="email" class="validate {{ $errors->has('email') ? ' invalid' : '' }}" name="email" value="{{ old('email') }}" required>
                                 @if($errors->has('email'))
                                     <span class="helper-text" data-error="{{ $errors->first('email') }}"></span>
                                 @endif
@@ -55,4 +55,16 @@
         </div>
     </div>
 </div>
+@endsection
+
+
+@section('scripts')
+    @parent
+    <script>
+        $(document).ready(function() {
+            // this line is needed cause materialize automatically blur the field with autofocus
+            $('#email').focus()
+        })
+    </script>
+
 @endsection

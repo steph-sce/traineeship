@@ -8,7 +8,7 @@ $factory->define(App\Post::class, function (Faker $faker) {
     $startDay = rand(1, 28);
     return [
         'post_type' => $faker->randomElement($typeValues),
-        'title' => $faker->sentence(3),
+        'title' => $faker->sentence(2),
         'description' => $faker->paragraph(25),
         'start_date' =>$faker->dateTimeInInterval("+" .$startDay . " days"),
         'end_date' => $faker->dateTimeInInterval("+" .$startDay + 7 . " days"),
