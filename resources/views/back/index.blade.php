@@ -1,8 +1,18 @@
 @extends('layouts.master')
 
+{{--@TODO : Gérer la selection multiple--}}
+
 @section('content')
-        <a href="{{route('post.create')}}" class="btn lime darken-1">{{__('Create new post')}}</a>
-    {{ $posts->links() }}
+        <div class="row">
+            <a href="{{route('post.create')}}" class="col s2 btn lime darken-1 hide-on-med-and-down">{{__('Create new post')}}</a>
+            <a href="{{route('showTrash')}}" class="col right btn red darken-1 hide-on-med-and-down"><span class="white red-text badge">{{ $trashed }}</span>{{__('Go to trash')}}</a>
+        </div>
+        @if($search !== null)
+            {{ $posts->appends($search)->links() }}
+        @else
+            {{ $posts->links() }}
+        @endif
+
     <table class="highlight">
         <thead>
         <tr>
@@ -25,8 +35,8 @@
                 <td class="hide-on-small-only">{{ $post->end_date->format(__('Y-m-d')) }}</td>
                 <td>{{ $post->status }}</td>
                 <td class="center">
-                    <a href="{{ route('post.edit', $post) }}" class="btn action-button lime darken-2 hide-on-med-and-down"><i class="material-icons">edit</i>{{ __('Edit') }}</a>
-                    <a href="{{ route('trash', $post) }}" class="btn red action-button hide-on-med-and-down"><i class="material-icons">delete_forever</i> {{ __('Trash') }}</a>
+                    <a href="{{ route('post.edit', $post) }}" class="large-control btn action-button lime darken-2 hide-on-med-and-down"><i class="material-icons">edit</i>{{ __('Edit') }}</a>&nbsp;
+                    <a href="{{ route('trash', $post) }}" class="large-control btn red action-button hide-on-med-and-down"><i class="material-icons">delete_forever</i> {{ __('Trash') }}</a>
                     <a href="{{ route('post.edit', $post) }}" class="btn-floating btn lime darken-2 action-button show-on-medium-and-down hide-on-large-only mt1"><i class="material-icons">edit</i></a>
                     <a href="{{ route('trash', $post) }}" class="btn-floating btn red action-button show-on-medium-and-down hide-on-large-only mt1"><i class="material-icons">delete_forever</i></a>
 
@@ -38,12 +48,20 @@
         </tbody>
     </table>
 
-    {{ $posts->links() }}
+        @if($search !== null)
+            {{ $posts->appends($search)->links() }}
+        @else
+            {{ $posts->links() }}
+        @endif
 
-        <div class="fixed-action-btn hide-on-med-and-down">
-            <a href="{{ route('showTrash') }}" class="btn-floating btn-large red">
-                <i class="material-icons">delete</i>
+        <div class="fixed-action-btn left">
+            <a class="btn-floating btn-large lime darken-1">
+                <i class="material-icons">add</i>
             </a>
+            <ul>
+                <li><a href="{{ route('showTrash') }}" class="btn-floating btn-large red"><i class="left material-icons">delete</i></a><a href="#" class="btn-floating mobile-fab-tip">{{ __('Go to trash') }}</a></li>
+                <li><a href="{{ route('post.create') }}" class="btn-floating btn-large teal lighten-2"><i class="material-icons">note_add</i></a><a href="#" class="btn-floating mobile-fab-tip">{{ __('Create new post') }}</a></li>
+            </ul>
         </div>
 
 @endsection
@@ -56,13 +74,44 @@
         </script>
     @endif
     <script>
+        var timeout = null;
+        document.addEventListener('DOMContentLoaded', function() {
 
-        $(document).on('click', '.clikable-row td:not(.center)', function() {
-            window.location.href = $(this).parent('tr').data('href')
-        })
+            var elems = document.querySelectorAll('.fixed-action-btn');
+            var instances = M.FloatingActionButton.init(elems);
+        });
         $(document).on('click', '.delete-item', function() {
             console.log($(this).data('post'));
         });
+
+        $('#search').on('blur', function() {
+            $('.close').trigger('click');
+        });
+        $('#search').on('keyup', function() {
+            if(timeout) {
+                clearInterval(timeout);
+            }
+            var value = $(this).val();
+
+            timeout = setTimeout(function() {
+                $.ajax({
+                    url : '/searchAdmin',
+                    data : {search : value},
+
+                    success : function(data) {
+                        console.log(data);
+                        $('main').html(data);
+                    }
+                });
+            }, 500);
+        })
+
+        $('form').on('submit', function(e) {
+            e.preventDefault();
+        })
+
+
+        $.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
 
 
         var footerY = $('footer').offset();

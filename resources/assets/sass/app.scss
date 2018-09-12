@@ -1,6 +1,7 @@
 
 // Fonts
 @import url('https://fonts.googleapis.com/css?family=Nunito');
+@import '~materialize-css/sass/materialize.scss';
 @font-face {
   font-family: 'Material Icons';
   font-style: normal;
@@ -32,7 +33,7 @@
 
 // Bootstrap
 //@import '~bootstrap/scss/bootstrap';
-@import '~materialize-css/sass/materialize.scss';
+
 
 //.navbar-laravel {
 //  background-color: #fff;
@@ -61,6 +62,14 @@
   td.center a {
     margin-top:1rem!important;
   }
+  div.fixed-action-btn {
+    right:auto;
+  }
+
+  a.mobile-fab-tip {
+    left : 85px;
+    text-align: left;
+  }
 }
 
 @media(min-width: 992px){
@@ -81,7 +90,18 @@
   font-family: "Open Sans", sans-serif;
 }
 
-footer {
+
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+main {
+  flex : 1 0 auto;
+}
+
+footer.page-footer {
   color : #A3A3A3;
   background-color: #292929;
   border-top: 8px solid #c0ca33;
@@ -107,9 +127,11 @@ button.datepicker-done, button.datepicker-cancel, .datepicker-table td.is-today:
 }
 
 .action-button i, ul.browser-default li i, .card-header span i  {
-
-  vertical-align: sub;
   margin-right: 0.75rem;
+}
+
+.add-category i, .remove-category i, .action-button i, ul.browser-default li i, .card-header span i {
+  vertical-align: sub;
 }
 
 .clikable-row td:not(.center) {
@@ -119,7 +141,6 @@ button.datepicker-done, button.datepicker-cancel, .datepicker-table td.is-today:
 ul.browser-default {
   list-style: none;
   margin-top: 1rem;
-  //border-right: 1px solid rgba(0,0,0,0.1);
 }
 ul.browser-default li {
   padding: 0.5rem;
@@ -160,7 +181,6 @@ ul.browser-default li {
 
 .card .card-image {
   padding-left: 0;
-  //padding-right: 0;
 }
 
 .card {
@@ -173,13 +193,19 @@ ul.browser-default li {
   position: relative;
 }
 
-.card-header span:first-of-type {
+.card-header span div.chip {
+  background-color: #c0ca33;
+  color: white;
+  margin-left: 1rem;
+}
+
+.card-header span:first-of-type, .card-header .chip {
   font-weight: 600;
 }
 
-.card-header span {
-  color : #c0ca33;
-}
+//.card-header span {
+//  color : #c0ca33;
+//}
 
 .card-header span:not(:first-of-type) {
   font-weight: 400;
@@ -190,10 +216,12 @@ ul.browser-default li {
   margin-left: 3rem;
 }
 
-//.card-header span i {
-//  position: absolute;
-//  left: -1rem;
-//}
+a span.badge {
+  border-radius: 50%;
+  margin-top: 0.5rem;
+  min-width: auto;
+  box-shadow: 2px 2px 10px grey;
+}
 
 .header-bg {
   background: url("/img/Artboard.png") no-repeat;
@@ -240,14 +268,18 @@ nav.nav-center ul li a:hover, nav.nav-center ul li a.active {
   color : #c3c622;
 }
 
-
-
-.footer-wrapper.row {
-  margin-bottom: 0;
+.mobile-fab-tip {
+  position: fixed;
+  right: 85px;
+  padding:0px 0.5rem;
+  background-color: rgba(50, 50, 50, 0.6);
+  border-radius: 4px;
+  color: #FFF;
+  width:fit-content;
+  height: 56px;
+  line-height: 56px;
 }
-footer {
-  opacity: 0;
-}
+
 
 footer p a {
   color: inherit;
@@ -258,13 +290,52 @@ footer div p {
   text-align: right;
 }
 
+tr.clikable-row td.center a{
+  margin : 0.5rem 0.25rem;
+}
+
+.large-control {
+  min-width: 145px;
+}
+
+.action-button.red {
+  background-color: #c64622!important;
+}
+
+.card-image-container {
+  margin-bottom: 1rem;
+}
+
+.remove-container {
+  -webkit-box-shadow: 1px 3px 5px black;
+  -moz-box-shadow: 1px 3px 5px black;
+  box-shadow: 1px 3px 5px black;
+}
+
+.remove-container {
+  padding: 3rem 0.75rem!important;
+}
+
+.row .chips .chip {
+  background-color: #c0ca33;
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
 
 // Floating Action Button animation on scroll
 
 @keyframes fab-anim-up {
-  0% { margin-bottom: 1rem;}
-  50% {margin-bottom: 3.5rem}
-  100% { margin-bottom: 6rem;}
+  0% {
+    margin-bottom: 1rem;
+  }
+  50% {
+    margin-bottom: 3.5rem
+  }
+  100% {
+    margin-bottom: 6rem;
+  }
 }
 
 .fab-animation-up {
@@ -273,9 +344,15 @@ footer div p {
 }
 
 @keyframes fab-anim-down {
-  0% { margin-bottom: 6rem;}
-  50% { margin-bottom: 3.5rem}
-  100% { margin-bottom: 0;}
+  0% {
+    margin-bottom: 6rem;
+  }
+  50% {
+    margin-bottom: 3.5rem
+  }
+  100% {
+    margin-bottom: 0;
+  }
 }
 
 .fab-animation-down {
@@ -283,4 +360,14 @@ footer div p {
   animation-fill-mode: forwards;
 }
 
+.remove-container label.active {
+  -webkit-transform: translateY(-8px) scale(0.8);
+  transform: translateY(-8px) scale(0.8);
+  -webkit-transform-origin: 0 0;
+  transform-origin: 0 0;
+}
+
+
+
+/* #c64622*/
 

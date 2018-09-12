@@ -65,23 +65,13 @@ class Post extends Model
     }
 
     public function getDescriptionAttribute($value) {
-        if(Route::is(['index', 'stages', 'formations'])) {
+        if(Route::is(['index', 'stages', 'formations', 'searchStages', 'searchFormations'])) {
             if(strlen($value) > 120) {
                 return substr($value, 0, 120) . "...";
             }
         }
         return $value;
     }
-
-/*    public function getStartDateAttribute($value)
-    {
-        return (new \DateTime($value))->format('d-m-Y');
-    }
-
-    public function getEndDateAttribute($value)
-    {
-        return (new \DateTime($value))->format('d-m-Y');
-    }*/
 
     // --------------------  Scopes --------------------
 

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use App\Post;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePost;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
@@ -14,10 +16,22 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $posts = Post::notTrash()->orderBy('id', 'ASC')->paginate(10);
-        return view('back.index', ['posts' => $posts]);
+
+        // GET parameters
+        $paginate = $request->input('paginate') ?? 10;
+        $search = $request->input('search') ?? null;
+
+        if($search !== null) {
+            $posts = $this->checkCategories($paginate, $search);
+        } else {
+            $posts = Post::notTrash()->orderBy('id', 'ASC')->paginate($paginate);
+        }
+        $trashed = Post::trash()->count();
+        $posts->withPath('?search=' . $search);
+
+        return view('back.index', ['posts' => $posts, 'trashed' => $trashed, 'search' => $search]);
     }
 
     /**
@@ -27,7 +41,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('back.create');
+        $categories = Category::all();
+        return view('back.create', ['categories' => $categories]);
     }
 
     /**
@@ -36,10 +51,25 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorePost $request)
+    public function store(Request $request)
     {
+        $catTab = explode(',' , $request->hcategories);
+        $catIDTab = [];
+
+        foreach ($catTab as $name) {
+            $newCatOrNot = Category::where('name', '=', $name)->get();
+            if($newCatOrNot->count() === 0) {
+                $category = new Category(['name' => $name]);
+                $category->save();
+                array_push($catIDTab, $category->id);
+            } else {
+                array_push($catIDTab, $newCatOrNot[0]->id);
+            }
+
+        }
 
         $post = Post::create($request->all());
+        $post->categories()->attach($catIDTab);
         $file = $request->picture;
 
         if(!empty($file)) {
@@ -104,6 +134,7 @@ class PostController extends Controller
     }
 
 
+
     /**
      * Set the status of the specified resource to trash.
      *
@@ -117,8 +148,19 @@ class PostController extends Controller
         $post->update([
             'status' => 'trash'
         ]);
+
+
         return redirect()->route('post.index')->with('success', __('Post have been trashed !'));
     }
+
+    public function setDraft(Post $post) {
+        $post->update([
+            'status' => 'draft'
+        ]);
+        return redirect()->route('showTrash')->with('success', __('Post have been restored to draft'));
+    }
+
+
 
 
     public function showTrash()
@@ -149,5 +191,25 @@ class PostController extends Controller
             'link' => $link,
             'title' => $request->img_title ?? "No title"
         ]);
+    }
+
+    private function checkCategories($paginate, $search)
+    {
+        $categories = Category::all();
+        foreach ($categories as $category) {
+
+            if(strpos(strtolower($category->name), $search) === false) {
+                //@TODO : Change for stripos
+                $posts = Post::notTrash()
+                    ->where('title', 'like', '%' . $search . '%')
+                    ->orWhere('post_type', 'like', '%' . $search . '%')
+                    ->paginate($paginate);
+            } else {
+                return Category::find($category->id)->posts()->paginate($paginate);
+            }
+        }
+
+        return $posts;
+
     }
 }

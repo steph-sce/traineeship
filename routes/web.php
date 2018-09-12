@@ -11,6 +11,10 @@
 |
 */
 
+use App\Post;
+use App\Category;
+use Illuminate\Http\Request;
+
 
 // ------------- Routes du front -------------
 Route::get('/', 'FrontController@index')->name('index');
@@ -41,3 +45,10 @@ Route::get('admin/trash', 'PostController@showTrash')->middleware('auth')->name(
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 // -------------------------------------------------------------
+
+
+// ------------- Routes de la recherche -------------
+
+Route::get('/searchAdmin', 'SearchController@searchAdmin');
+Route::get('/searchStages', 'SearchController@searchStages')->name('searchStages');
+Route::get('/searchFormations', 'SearchController@searchFormations')->name('searchFormations');

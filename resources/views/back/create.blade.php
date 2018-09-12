@@ -25,6 +25,15 @@
         </div>
 
         <div class="row">
+            <div class="chips input-field">
+                <input class="input" name="categories" id="categories">
+            </div>
+        </div>
+
+        <input type="hidden" id="hcategories" name="hcategories">
+
+
+        <div class="row">
             <div class="input-field col s12">
                 <select name="post_type" id="post_type">
                     <option value="stage" {{ old('post_type') === "stage" ? "selected" : "" }}>Stage</option>
@@ -116,10 +125,53 @@
 @section('scripts')
     @parent
     <script>
+        var data = {}
+        var autocompleteData = {}
+        @forelse($categories as $id => $category)
+                data['{{$id}}'] = '{{$category->name}}'
+                {{--tags.push("'{{$category->name}}' : null");--}}
+        @empty
+        @endforelse
+        console.log(autocompleteData)
+        $.each(data, function(index, value) {
+            autocompleteData[value] = null;
+        })
+        console.log(autocompleteData);
         document.addEventListener('DOMContentLoaded', function() {
-            var elems = document.querySelectorAll('select');
-            var instances = M.FormSelect.init(elems);
+            var formPrevent = true;
+            var elems = document.querySelectorAll('#post_type');
+            var postType = M.FormSelect.init(elems);
+            elems = document.querySelectorAll('#status');
+            var status = M.FormSelect.init(elems);
+            elems = document.querySelectorAll('.chips');
+            var options = {
+                autocompleteOptions : {
+                    data : autocompleteData
+                }
+
+            };
+            var chips = M.Chips.init(elems, options);
+
+            console.log(chips);
+            $('form').on('submit', function(e) {
+                if(formPrevent === true) {
+                    e.preventDefault();
+                    var data = chips[0].chipsData;
+                    var chipsTab = [];
+                    data.forEach(function(i) {
+                        chipsTab.push(i.tag);
+                    })
+
+                    $('#hcategories').val(chipsTab);
+                    formPrevent = false;
+                    $('form').submit();
+                }
+
+
+            })
         });
+
+
         document.addEventListener('DOMContentLoaded', function() {
             var options = {
                 minDate : new Date(),
@@ -182,6 +234,15 @@
         });
         $(document).on('click', '.datepicker-day-button', function() {
             $('td .is-today').removeClass('is-today');
+        });
+        $(document).on('click', '.add-category', function(){
+            $('#category').parent('.input-field').removeClass('hide');
+            $('.add-container').addClass('hide');
+        })
+
+        $(document).on('click', '.remove-category', function() {
+            $('#category').parent('.input-field').addClass('hide');
+            $('.add-container').removeClass('hide');
         })
     </script>
     @if(Session::has('errors'))
