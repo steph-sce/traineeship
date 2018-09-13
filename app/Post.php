@@ -32,7 +32,11 @@ class Post extends Model
             if($diff->days === 0) {
                 return "1 jour";
             }
-            return $diff->days . " jours";
+            if ($diff->days % 7 === 0) {
+                $str = $diff->days / 7 <= 1 ? " semaine" : " semaines";
+                return $diff->days / 7 . $str;
+            }
+            return $diff->days +1 . " jours";
         }
         return $diff->m . " mois";
     }

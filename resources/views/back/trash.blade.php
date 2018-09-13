@@ -1,4 +1,6 @@
 @extends('layouts.master')
+
+{{--@TODO gérer la selection multiple pour suppression ou restauration--}}
 @section('content')
     <div class="back-button-container">
         <a href="{{ route('post.index') }}" class="text-lime back-button mt2">{{ __('Back to dashboard') }}</a>

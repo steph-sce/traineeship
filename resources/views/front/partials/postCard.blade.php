@@ -1,4 +1,3 @@
-{{--@TODO: Ne pas oublier les catégories ! --}}
 <div class="row card link-container">
     <div class="card-image-container center card-image col s12 m4">
         @if(count($post->picture) > 0)

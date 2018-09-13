@@ -6,7 +6,7 @@
 
         <div class="row">
             <div class="input-field col s12">
-                <input class="validate" type="text" name="title" id="title" placeholder="{{ __('Title') }}" value="{{ old('title') }}">
+                <input class="validate" type="text" name="title" id="title" placeholder="{{ __('Title') }}" value="{{ old('title') }}" data-length="50">
                 <label for="" class="active"></label>
                 @if(Session::has('errors'))
                     <span class="helper-text" data-error="{{ $errors->first('title') }}"></span>
@@ -125,17 +125,27 @@
 @section('scripts')
     @parent
     <script>
+        $('#title').characterCounter();
         var data = {}
         var autocompleteData = {}
+        var tagsData = []
         @forelse($categories as $id => $category)
                 data['{{$id}}'] = '{{$category->name}}'
-                {{--tags.push("'{{$category->name}}' : null");--}}
         @empty
         @endforelse
         console.log(autocompleteData)
         $.each(data, function(index, value) {
             autocompleteData[value] = null;
+        });
+        @if(old('hcategories'))
+        console.log('{{ old('hcategories') }}')
+        var oldCats = '{{ old('hcategories') }}'
+        window.categoriesTab = oldCats.split(',')
+        categoriesTab.forEach(function(i) {
+            tagsData.push({'tag' : i});
         })
+        @endif
+        console.log(tagsData);
         console.log(autocompleteData);
         document.addEventListener('DOMContentLoaded', function() {
             var formPrevent = true;
@@ -145,6 +155,7 @@
             var status = M.FormSelect.init(elems);
             elems = document.querySelectorAll('.chips');
             var options = {
+                data: tagsData ,
                 autocompleteOptions : {
                     data : autocompleteData
                 }
@@ -176,7 +187,7 @@
             var options = {
                 minDate : new Date(),
                 yearRange : 4,
-                format : 'yyyy-mm-dd',
+                format : 'dd-mm-yyyy',
                 firstDay : 1,
                 i18n : {
                     cancel : "Annuler",
@@ -231,6 +242,12 @@
             }
             var elems = document.querySelectorAll('.datepicker');
             var instances = M.Datepicker.init(elems, options);
+            @if(old('start_date'))
+                instances[0].setDate(new Date('{{ date('m-d-Y', strtotime(old('start_date'))) }}'));
+            @endif
+            @if(old('end_date'))
+            instances[1].setDate(new Date('{{ date('m-d-Y', strtotime(old('end_date'))) }}'));
+            @endif
         });
         $(document).on('click', '.datepicker-day-button', function() {
             $('td .is-today').removeClass('is-today');

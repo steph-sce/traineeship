@@ -51,35 +51,22 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StorePost $request)
     {
-        $catTab = explode(',' , $request->hcategories);
-        $catIDTab = [];
-
-        foreach ($catTab as $name) {
-            $newCatOrNot = Category::where('name', '=', $name)->get();
-            if($newCatOrNot->count() === 0) {
-                $category = new Category(['name' => $name]);
-                $category->save();
-                array_push($catIDTab, $category->id);
-            } else {
-                array_push($catIDTab, $newCatOrNot[0]->id);
-            }
-
-        }
-
-        $post = Post::create($request->all());
+        $catIDTab = $this->fillPostCategoriesIdArray($request->hcategories);
+        $post = Post::create($request->except(['start_date', 'end_date']));
+        $post->start_date = \DateTime::createFromFormat('d-m-Y', $request->input('start_date'));
+        $post->end_date = \DateTime::createFromFormat('d-m-Y', $request->input('end_date'));
         $post->categories()->attach($catIDTab);
         $file = $request->picture;
 
         if(!empty($file)) {
-            $link = $request->file('picture')->store('images');
+            $link = $request->file('picture')->store('/');
             $this->savePicture($post, $link);
         }
 
         $post->save();
         return redirect()->route('post.index')->with('success', 'Le post a bien été crée');
-//        dd($request->validated());
     }
 
     /**
@@ -101,7 +88,9 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('back.edit', ['post' => $post]);
+        $categories = Category::all();
+        $postCategories = $post->categories()->get();
+        return view('back.edit', ['post' => $post, 'categories' => $categories, 'postCategories' => $postCategories]);
     }
 
     /**
@@ -113,17 +102,12 @@ class PostController extends Controller
      */
     public function update(StorePost $request, Post $post)
     {
-        $start_date = \DateTime::createFromFormat('d-m-Y', $request->input('start_date'));
-        $end_date = \DateTime::createFromFormat('d-m-Y', $request->input('end_date'));
-        $post->title = $request->input('title');
-        $post->description = $request->input('description');
-        $post->post_type = $request->input('post_type');
-        $post->start_date = $start_date;
-        $post->end_date = $end_date;
-        $post->price = $request->input('price');
-        $post->max_students = $request->input('max_students');
-        $post->status = $request->input('status');
+        $catIDTab = $this->fillPostCategoriesIdArray($request->hcategories);
+        $post->update($request->except(['start_date', 'end_date']));
+        $post->start_date = \DateTime::createFromFormat('d-m-Y', $request->input('start_date'));
+        $post->end_date = \DateTime::createFromFormat('d-m-Y', $request->input('end_date'));
         $file = $request->picture;
+        $post->categories()->sync($catIDTab);
 
         if(!empty($file)) {
             $link = $request->file('picture')->store('/');
@@ -197,7 +181,6 @@ class PostController extends Controller
     {
         $categories = Category::all();
         foreach ($categories as $category) {
-
             if(strpos(strtolower($category->name), $search) === false) {
                 //@TODO : Change for stripos
                 $posts = Post::notTrash()
@@ -211,5 +194,23 @@ class PostController extends Controller
 
         return $posts;
 
+    }
+
+    private function fillPostCategoriesIdArray($data)
+    {
+        $catTab = explode(',', $data);
+        $array = [];
+        foreach ($catTab as $name) {
+            $newCatOrNot = Category::where('name', '=', $name)->get();
+            if($newCatOrNot->count() === 0) {
+                $category = new Category(['name' => $name]);
+                $category->save();
+                array_push($array, $category->id);
+            } else {
+                array_push($array, $newCatOrNot[0]->id);
+            }
+
+        }
+        return $array;
     }
 }

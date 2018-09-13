@@ -1,5 +1,7 @@
 @extends('layouts.master')
 
+{{--@TODO: Gérer la récupération des catégories du post | la sélection multiple sur ce champ--}}
+
 @section('content')
     <form class="mt2 col s12 l8 offset-l2" action="{{route('post.update', $post)}}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -7,7 +9,7 @@
 
         <div class="row">
             <div class="input-field col s12">
-                <input class="validate" type="text" name="title" id="title" placeholder="{{ __('Title') }}" value="{{ old('title', $post->title) }}">
+                <input class="validate" type="text" name="title" id="title" placeholder="{{ __('Title') }}" value="{{ old('title', $post->title) }}" data-length="50">
                 <label for="" class="active"></label>
                 @if(Session::has('errors'))
                     <span class="helper-text" data-error="{{ $errors->first('title') }}"></span>
@@ -24,6 +26,14 @@
                 @endif
             </div>
         </div>
+
+        <div class="row">
+            <div class="chips input-field col s12">
+                <input class="input" name="categories" id="categories">
+            </div>
+        </div>
+
+        <input type="hidden" id="hcategories" name="hcategories">
 
         <div class="row">
             <div class="input-field col s12">
@@ -117,12 +127,61 @@
 @section('scripts')
     @parent
     <script>
+        console.log({{ old('end_date', $post->end_date->format('Y-m-d')) }})
+        $('#title').characterCounter();
+        var data = {}
+        var tagsData = []
+        var autocompleteData = {}
+        @forelse($categories as $id => $category)
+            data['{{$id}}'] = '{{$category->name}}'
+        @empty
+        @endforelse
+
+        @forelse($postCategories as $category)
+                tagsData.push({tag : '{{ $category->name }}'});
+        @empty
+        @endforelse
+
+        $.each(data, function(index, value) {
+            autocompleteData[value] = null;
+        });
+        console.log(autocompleteData);
+
+        var formPrevent = true;
         document.addEventListener('DOMContentLoaded', function() {
             var elems = document.querySelectorAll('select');
             var instances = M.FormSelect.init(elems);
+            elems = document.querySelectorAll('.chips');
+            var options = {
+                data: tagsData,
+                autocompleteOptions : {
+                    data : autocompleteData
+                }
+
+            };
+            var chips = M.Chips.init(elems, options);
+
+            console.log(chips);
+            $('form').on('submit', function(e) {
+                if(formPrevent === true) {
+                    e.preventDefault();
+                    console.log($('#end_date').val())
+                    var data = chips[0].chipsData;
+                    var chipsTab = [];
+                    data.forEach(function(i) {
+                        chipsTab.push(i.tag);
+                    })
+
+                    $('#hcategories').val(chipsTab);
+                    formPrevent = false;
+                    $('form').submit();
+                }
+
+
+            })
         });
         document.addEventListener('DOMContentLoaded', function() {
-            {{ $post->start_date->format('Y-m-d') }}
+            console.log({{ old('end_date') }})
             var options = {
                 minDate : new Date(),
                 yearRange : 4,
@@ -181,12 +240,24 @@
             }
             var elems = document.querySelectorAll('.datepicker');
             var instances = M.Datepicker.init(elems, options);
-            instances[0].setDate(new Date('{{ old('start_date', $post->start_date->format('Y-m-d')) }}'));
-            instances[1].setDate(new Date('{{ $post->end_date->format('Y-m-d') }}'));
+            @if(old('start_date'))
+                instances[0].setDate(new Date('{{ date('m-d-Y', strtotime(old('start_date'))) }}'));
+            @else
+                instances[0].setDate(new Date('{{ $post->start_date }}'));
+                console.log(instances[0].date);
+            @endif
+
+            @if(old('end_date'))
+                instances[1].setDate(new Date('{{ date('m-d-Y', strtotime(old('end_date'))) }}'));
+            @else
+                instances[1].setDate(new Date('{{ $post->end_date->format('m-d-Y') }}'));
+            @endif
+            window.instances = instances;
         });
         $(document).on('click', '.datepicker-day-button', function() {
             $('td .is-today').removeClass('is-today');
         })
+
     </script>
     @if(Session::has('errors'))
         <script>

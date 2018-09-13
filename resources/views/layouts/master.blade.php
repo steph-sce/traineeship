@@ -25,14 +25,12 @@
         </div>
     </header>
 
-    <div id="app">
         @include('partials.menu')
         <main class="row container">
             <div class="col s12">
                 @yield('content')
             </div>
         </main>
-    </div>
 
 
     <footer class="col s12 page-footer">
