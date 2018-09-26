@@ -13,8 +13,7 @@ class MailController extends Controller
             'email' => 'email|required',
             'message' => 'min:2|required'
         ]);
-//        dd($request);
-        Mail::to('toto@test.com')->send(new Contact($request));
+        Mail::to('admin@formaction.fr')->send(new Contact($request));
         return redirect()->route('contact')->with('message', __('Your mail has been sent'));
     }
 }

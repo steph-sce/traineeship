@@ -2,7 +2,28 @@
 
 @section('content')
 
-    <form class="mt2 col s12 l6 offset-l3" id="contact-form" action="{{ route('sendContactMail') }}" method="POST">
+    <div id="contact-infos" class="col m4 s12">
+        <div id="contact-title">
+            <p class="lime-text darken-1">{{ __('Contact us') }}</p>
+        </div>
+        <img src="{{ asset('img/logo_black.svg') }}" alt="">
+
+        <div>
+            <p class="bold">{{ __('E-Mail Address') }}: </p>
+            <p>form@ction.com</p>
+        </div>
+        <div>
+            <p class="bold">{{ __('Phone') }}: </p>
+            <p>(+33)1 23 45 67 89</p>
+        </div>
+        <div id="social">
+            <img  id="facebook" class="responsive-img col s2 m3" src="{{ asset('img/icon-facebook.png') }}" alt="logofacebook">
+            <img  id="google" class="responsive-img col s2 m3" src="{{ asset('img/icon-googleplus.png') }}" alt="logogoogle">
+            <img  id="linkedin" class="responsive-img col s2 m3" src="{{ asset('img/icon-linkedin.png') }}" alt="logolinkedin">
+        </div>
+    </div>
+
+    <form class="mt2 col s12 m8" id="contact-form" action="{{ route('sendContactMail') }}" method="POST">
         @csrf
         <div class="row">
             <div class="input-field col s12">
@@ -43,7 +64,14 @@
     @endif
     @if(Session::has('message'))
         <script type="text/javascript">
-            alert('{{Session::get('message')}}');
+            const output = swal.mixin({
+                type : "success",
+                title : '{{ Session::get('message') }}'
+            })
+
+            output({
+                confirmButtonColor : "#c0ca33"
+            })
         </script>
     @endif
 
