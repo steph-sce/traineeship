@@ -3,10 +3,10 @@
         <a href="#" data-target="burger-menu" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 
         <ul class="col s8 offset-s2 hide-on-med-and-down">
-            <li class="white-text"><a tabindex="1" class="{{ $active === "index" ? "active" : "" }}" href="{{route('index')}}">Accueil</a></li>
+            <li class="white-text"><a tabindex="1" class="{{ $active === "index" ? "active" : "" }}" href="{{route('index')}}">{{ __('Homepage') }}</a></li>
             @if($types === true)
-                <li class="white-text"><a tabindex="2" class="{{ $active === "stages" ? "active" : "" }}" href="{{route('stages')}}">Stages</a></li>
-                <li class="white-text"><a tabindex="3" class="{{ $active === "formations" ? "active" : "" }}" href="{{route('formations')}}">Formations</a></li>
+                <li class="white-text"><a tabindex="2" class="{{ $active === "stages" ? "active" : "" }}" href="{{route('stages')}}">{{ __('Internship') }}</a></li>
+                <li class="white-text"><a tabindex="3" class="{{ $active === "formations" ? "active" : "" }}" href="{{route('formations')}}">{{ __('Training') }}</a></li>
                 <li class="white-text"><a tabindex="4" class="{{ $active === "contact" ? "active" : "" }}" href="{{route('contact')}}">Contact</a></li>
             @endif
             @guest
@@ -22,9 +22,9 @@
                 </form>
             @endguest
         </ul>
-        <form id="search-container" method="POST" class="input-field col s8 m2">
+        <form id="search-container" class="input-field col s8 m2 {{ $searchbar === false ? 'hide' : '' }}">
             @csrf
-            <input tabindex="7" id="search" type="search" name="search">
+            <input tabindex="7" id="search" type="search" name="search" value="{{ $search ?? "" }}">
             <label class="label-icon" for="search"><i class="material-icons">search</i></label>
             <i class="material-icons close">close</i>
         </form>

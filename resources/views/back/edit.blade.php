@@ -1,8 +1,9 @@
 @extends('layouts.master')
 
-{{--@TODO: Gérer la récupération des catégories du post | la sélection multiple sur ce champ--}}
-
 @section('content')
+    <div class="back-button-container">
+        <a href="{{ route('post.index') }}" class="text-lime back-button mt2">{{ __('Back to dashboard') }}</a>
+    </div>
     <form class="mt2 col s12 l8 offset-l2" action="{{route('post.update', $post)}}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('put')
@@ -38,8 +39,9 @@
         <div class="row">
             <div class="input-field col s12">
                 <select name="post_type" id="post_type">
-                    <option value="stage" {{ old('post_type', $post->post_type) === "stage" ? "selected" : "" }}>Stage</option>
-                    <option value="formation" {{ old('post_type', $post->post_type) === "formation" ? "selected" : "" }}>Formation</option>
+
+                    <option value="stage" {{ old('post_type', $post->post_type) === "Stage" ? "selected" : "" }}>Stage</option>
+                    <option value="formation" {{ old('post_type', $post->post_type) === "Formation" ? "selected" : "" }}>Formation</option>
                 </select>
                 <label for="post_type">{{ __('Select post type') }}</label>
                 @if(Session::has('errors'))
@@ -114,6 +116,12 @@
                     <span class="helper-text" data-error="{{ $errors->first('picture') }}"></span>
                 @endif
             </div>
+            @if(count($post->picture) > 0)
+                <div class="col s4">
+                    <p>Image déjà présente</p>
+                    <img class="responsive-img" src="{{ asset('images/' . $post->picture->link) }}" alt="">
+                </div>
+            @endif
         </div>
 
         <div class="center">
@@ -121,13 +129,35 @@
         </div>
     </form>
 
+    <div class="fixed-action-btn  right" onclick="topFunction()" id="myBtn" title="Go to top">
+        <a class="btn-floating btn-large lime darken-1"><i class="material-icons">expand_less</i></a>
+    </div>
+
 @endsection
 
 
 @section('scripts')
     @parent
     <script>
-        console.log({{ old('end_date', $post->end_date->format('Y-m-d')) }})
+        // When the user scrolls down 200px from the top of the document, show the button
+        window.onscroll = function() {scrollFunction()};
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                document.getElementById("myBtn").style.display = "block";
+            } else {
+                document.getElementById("myBtn").style.display = "none";
+            }
+        }
+
+        // When the user clicks on the button, scroll to the top of the document
+        function topFunction() {
+            $("html, body").animate({scrollTop : 0}, 1000);
+            //document.body.scrollTop = 0; // For Safari
+            //document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        }
+
+
         $('#title').characterCounter();
         var data = {}
         var tagsData = []

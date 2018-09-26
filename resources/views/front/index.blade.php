@@ -9,3 +9,9 @@
     @endforelse
 
 @endsection
+
+
+@section('scripts')
+    @parent
+    <script src="{{asset('js/konami.js')}}"></script>
+@endsection

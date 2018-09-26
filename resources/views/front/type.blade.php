@@ -9,11 +9,32 @@
         {{ $posts->links() }}
     @endif
 
-    @forelse($posts as $post)
-        @include('front.partials.postCard')
-    @empty
-        Aucune formation correspondante au filtre selectionné n'a été publiée
-    @endforelse
+    @if(count($posts) > 0)
+        @forelse($posts as $post)
+            @include('front.partials.postCard')
+        @empty
+        @endforelse
+
+    @else
+        @if($search === null)
+            <div class="row center">
+                <p class="col s12">
+                    {{ __('No records are present') }}
+                </p>
+            </div>
+        @else
+            <div class="row center">
+                <p class="col s12">
+                    {{ __('No matches for this search') }}
+                </p>
+            </div>
+        @endif
+
+    @endif
+
+
+
+
 
 
     @if($search !== null)
@@ -28,41 +49,11 @@
     <script>
         @if(Route::is('stages'))
             var url = '/searchStages';
-            @else
-            var url = '/searchFormations'
+            var route = '{{ route('stages') }}'
+        @elseif(Route::is('formations'))
+            var url = '/searchFormations';
+            var route = '{{ route('formations') }}'
         @endif
-        var timeout = null;
-        $('#search').on('blur', function() {
-            $('.close').trigger('click');
-        });
-        $('#search').on('keyup', function() {
-            if(timeout) {
-                clearInterval(timeout);
-            }
-            var value = $(this).val();
-
-            timeout = setTimeout(function() {
-                $.ajax({
-                    url : url,
-                    data : {search : value},
-
-                    success : function(data) {
-                        console.log(data);
-                        $('main').html(data);
-                    }
-                });
-            }, 200);
-            // if(value.length >= 2) {
-            //     $.ajax({
-            //         url : '/searchStages',
-            //         data : {search : value},
-            //
-            //         success : function(data) {
-            //             console.log(data);
-            //             $('main').html(data);
-            //         }
-            //     });
-            // }
-        })
     </script>
+    <script src="{{ asset('/js/search.js') }}" type="text/javascript"></script>
 @endsection

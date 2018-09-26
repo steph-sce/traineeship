@@ -12,7 +12,7 @@
                         <div class="row">
                             <div class="input-field col s12">
                                 <label for="email" class="active">{{ __('E-Mail Address') }}</label>
-                                <input id="email" type="email" class="validate {{ $errors->has('email') ? ' invalid' : '' }}" name="email" value="{{ old('email') }}" required>
+                                <input id="email" type="email" class="validate {{ $errors->has('email') ? 'invalid' : '' }}" name="email" value="{{ old('email') }}" required>
                                 @if($errors->has('email'))
                                     <span class="helper-text" data-error="{{ $errors->first('email') }}"></span>
                                 @endif
@@ -22,7 +22,7 @@
                         <div class="row">
                             <div class="input-field col s12">
                                 <label for="password">{{ __('Password') }}</label>
-                                <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' invalid' : '' }}" name="password" required>
+                                <input id="password" type="password" class="validate {{ $errors->has('password') ? 'invalid' : '' }}" name="password" required>
                                 @if ($errors->has('password'))
                                     <span class="helper-text" data-error="{{ $errors->first('password') }}"></span>
                                 @endif
@@ -40,11 +40,11 @@
 
                         <div class="row center">
                             <div>
-                                <button type="submit" class="form-mt btn lime darken-1">
+                                <button type="submit" class="form-mt btn lime darken-1 mt1">
                                     {{ __('Login') }}
                                 </button>
 
-                                <a class="form-mt btn lime darken-1" href="{{ route('password.request') }}">
+                                <a class="form-mt btn lime darken-1 mt1" href="{{ route('password.request') }}">
                                     {{ __('Forgot Your Password?') }}
                                 </a>
                             </div>

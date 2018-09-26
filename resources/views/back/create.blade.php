@@ -1,12 +1,14 @@
 @extends('layouts.master')
 
+{{--@TODO : recuperer l'image lors de l'echec du create--}}
+
 @section('content')
     <form class="mt2 col s12 l8 offset-l2" action="{{route('post.store')}}" method="POST" enctype="multipart/form-data">
         @csrf
 
         <div class="row">
             <div class="input-field col s12">
-                <input class="validate" type="text" name="title" id="title" placeholder="{{ __('Title') }}" value="{{ old('title') }}" data-length="50">
+                <input class="validate {{ $errors->has('title') ? 'invalid' : '' }}" type="text" name="title" id="title" placeholder="{{ __('Title') }}" value="{{ old('title') }}" data-length="50">
                 <label for="" class="active"></label>
                 @if(Session::has('errors'))
                     <span class="helper-text" data-error="{{ $errors->first('title') }}"></span>
@@ -16,7 +18,7 @@
 
         <div class="row">
             <div class="input-field col s12">
-                <textarea class="materialize-textarea validate" name="description" id="description">{{ old('description') }}</textarea>
+                <textarea class="materialize-textarea validate {{ $errors->has('description') ? 'invalid' : '' }}" name="description" id="description">{{ old('description') }}</textarea>
                 <label for="description">{{ __('Description') }}</label>
                 @if(Session::has('errors'))
                     <span class="helper-text" data-error="{{ $errors->first('description') }}"></span>
@@ -24,10 +26,11 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="chips input-field">
-                <input class="input" name="categories" id="categories">
+        <div id="chips-container" class="row">
+            <div id="categories-container" class="chips input-field col s12">
+                <input class="input validate" name="categories" id="categories">
             </div>
+
         </div>
 
         <input type="hidden" id="hcategories" name="hcategories">
@@ -68,7 +71,7 @@
 
         <div class="row">
             <div class="input-field col s12">
-                <input type="number" min="0" max="99999.99" step="0.01" name="price" id="price" value="{{ old('price') }}">
+                <input  class="validate" type="number" min="0" max="99999.99" step="0.01" name="price" id="price" value="{{ old('price') }}">
                 <label for="price">{{ __('Price') }}</label>
                 @if(Session::has('errors'))
                     <span class="helper-text" data-error="{{ $errors->first('price') }}"></span>
@@ -133,20 +136,16 @@
                 data['{{$id}}'] = '{{$category->name}}'
         @empty
         @endforelse
-        console.log(autocompleteData)
         $.each(data, function(index, value) {
             autocompleteData[value] = null;
         });
         @if(old('hcategories'))
-        console.log('{{ old('hcategories') }}')
         var oldCats = '{{ old('hcategories') }}'
-        window.categoriesTab = oldCats.split(',')
+        categoriesTab = oldCats.split(',')
         categoriesTab.forEach(function(i) {
             tagsData.push({'tag' : i});
         })
         @endif
-        console.log(tagsData);
-        console.log(autocompleteData);
         document.addEventListener('DOMContentLoaded', function() {
             var formPrevent = true;
             var elems = document.querySelectorAll('#post_type');
@@ -158,7 +157,8 @@
                 data: tagsData ,
                 autocompleteOptions : {
                     data : autocompleteData
-                }
+                },
+                placeholder : '{{ __('Add a new category') }}'
 
             };
             var chips = M.Chips.init(elems, options);

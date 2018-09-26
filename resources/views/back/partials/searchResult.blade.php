@@ -49,3 +49,5 @@
         <li><a href="{{ route('post.create') }}" class="btn-floating btn-large teal lighten-2"><i class="material-icons">note_add</i></a><a href="#" class="btn-floating mobile-fab-tip">{{ __('Create new post') }}</a></li>
     </ul>
 </div>
+
+<script src="{{ asset('js/fab.js') }}" type="text/javascript"></script>
