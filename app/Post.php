@@ -27,14 +27,16 @@ class Post extends Model
     // Helpers
 
     public function getDiffDate() {
-        $diff = date_diff($this->start_date, $this->end_date);
+        $newStartDate = new \DateTime($this->start_date->format('Y-m-d'));
+        $newEndDate = new \DateTime($this->end_date->format('Y-m-d'));
+        $diff = date_diff($newStartDate, $newEndDate);
         if($diff->m === 0) {
             if($diff->days === 0) {
                 return "1 jour";
             }
-            if ($diff->days % 7 === 0) {
-                $str = $diff->days / 7 <= 1 ? " semaine" : " semaines";
-                return $diff->days / 7 . $str;
+            if (($diff->days +1) % 7 === 0) {
+                $str = ($diff->days + 1) / 7 <= 1 ? " semaine" : " semaines";
+                return ($diff->days +1) / 7 . $str;
             }
             return $diff->days +1 . " jours";
         }
@@ -59,7 +61,7 @@ class Post extends Model
 
     public function getStatusAttribute($value)
     {
-        if(Route::is('post.edit')) return $value;
+        if(Route::is(['post.edit', 'show'])) return $value;
         return __(ucfirst($value));
     }
 

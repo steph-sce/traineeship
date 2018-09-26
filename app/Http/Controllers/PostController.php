@@ -24,14 +24,33 @@ class PostController extends Controller
         $search = $request->input('search') ?? null;
 
         if($search !== null) {
-            $posts = $this->checkCategories($paginate, $search);
+            $posts = $this->checkCategories($paginate, $search, 'notTrash');
+            $posts->withPath('?search=' . $search);
         } else {
-            $posts = Post::notTrash()->orderBy('id', 'ASC')->paginate($paginate);
+            $posts = Post::notTrash()->orderBy('updated_at', 'DESC')->paginate($paginate);
         }
         $trashed = Post::trash()->count();
-        $posts->withPath('?search=' . $search);
+
 
         return view('back.index', ['posts' => $posts, 'trashed' => $trashed, 'search' => $search]);
+    }
+
+
+    public function showTrash(Request $request)
+    {
+        // GET parameters
+        $paginate = $request->input('paginate') ?? 10;
+        $search = $request->input('search') ?? null;
+
+        if($search !== null) {
+            $posts = $this->checkCategories($paginate, $search, 'trash');
+            $posts->withPath('?search=' . $search);
+        } else {
+            $posts = Post::trash()->orderBy('updated_at', 'DESC')->paginate($paginate);
+        }
+
+
+        return view('back.trash', ['posts' => $posts, 'search' => $search]);
     }
 
     /**
@@ -91,6 +110,7 @@ class PostController extends Controller
         $categories = Category::all();
         $postCategories = $post->categories()->get();
         return view('back.edit', ['post' => $post, 'categories' => $categories, 'postCategories' => $postCategories]);
+        in_array($id, $post->categories()->pluck('id')) ? "checked" : "";
     }
 
     /**
@@ -134,24 +154,51 @@ class PostController extends Controller
         ]);
 
 
-        return redirect()->route('post.index')->with('success', __('Post have been trashed !'));
+        return redirect()->route('post.index')->with('warning', __('Post has been trashed !'));
     }
 
-    public function setDraft(Post $post) {
+
+    public function massTrash(Request $request)
+    {
+        $postIdTab = explode(',', $request->input('ids'));
+        foreach ($postIdTab as $postId) {
+            $post = Post::find($postId);
+            $post->update([
+                'status' => 'trash'
+            ]);
+        }
+    }
+
+    public function massDelete(Request $request)
+    {
+        $postIdTab = explode(',', $request->input('ids'));
+        foreach ($postIdTab as $postId) {
+            $post = Post::find($postId);
+            $post->delete();
+        }
+
+    }
+    public function restore(Request $request)
+    {
+        $postIdTab = explode(',', $request->input('ids'));
+        foreach ($postIdTab as $postId) {
+            $post = Post::find($postId);
+            $post->update([
+                'status' => 'draft'
+            ]);
+        }
+
+    }
+
+    public function setDraft(Post $post)
+    {
         $post->update([
             'status' => 'draft'
         ]);
-        return redirect()->route('showTrash')->with('success', __('Post have been restored to draft'));
+        return redirect()->route('showTrash')->with('success', __('Post has been restored to draft'));
     }
 
 
-
-
-    public function showTrash()
-    {
-        $posts = Post::trash()->paginate(10);
-        return view('back.trash', ['posts' => $posts]);
-    }
 
     /**
      * Remove the specified resource from storage.
@@ -177,18 +224,27 @@ class PostController extends Controller
         ]);
     }
 
-    private function checkCategories($paginate, $search)
+    private function checkCategories($paginate, $search, $type)
     {
         $categories = Category::all();
         foreach ($categories as $category) {
-            if(strpos(strtolower($category->name), $search) === false) {
-                //@TODO : Change for stripos
-                $posts = Post::notTrash()
-                    ->where('title', 'like', '%' . $search . '%')
-                    ->orWhere('post_type', 'like', '%' . $search . '%')
-                    ->paginate($paginate);
+            if(stripos($category->name, $search) === false) {
+                if($type === 'notTrash') {
+                    $posts = Post::where('title', 'like', '%' . $search . '%')
+                        ->orWhere('post_type', 'like', '%' . $search . '%')
+                        ->orWhere('status', 'like', '%' . $search . '%')
+                        ->$type()
+                        ->paginate($paginate);
+                } else {
+                    $posts = Post::where('title', 'like', '%' . $search . '%')
+                        ->orWhere('post_type', 'like', '%' . $search . '%')
+                        ->$type()
+                        ->paginate($paginate);
+
+                }
+
             } else {
-                return Category::find($category->id)->posts()->paginate($paginate);
+                return Category::find($category->id)->posts()->$type()->paginate($paginate);
             }
         }
 

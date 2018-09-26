@@ -16,20 +16,18 @@ class ViewService extends ServiceProvider
      */
     public function boot()
     {
-        view()->composer(['layouts.master'], function($view){
-            $sidebar = true;
-            if(Route::is(['show', 'post.*', 'contact', 'showTrash'])) $sidebar = false;
-
-            $view->with('sidebar', $sidebar);
-        });
-
         view()->composer(['partials.menu'], function($view) {
+            $searchbar = true;
+            $types = true;
+
+            //setting the active nav link
             switch(request()->route()->uri) {
                 default :
                     $active = null;
                     break;
                 case "/":
                     $active = "index";
+                    $searchbar = false;
                     break;
                 case "contact":
                     $active = "contact";
@@ -41,10 +39,16 @@ class ViewService extends ServiceProvider
                     $active = "formations";
                     break;
             }
-            $types = true;
+            // Getting rid of stages & formations nav buttons when authenticated
             if (Auth::check() === true) $types = false;
+
+            //
+            if(Route::is('show')) $searchbar = false;
+
+            // Setting the active link to dashboard when authenticated user in viewing it
             if(Route::is('post.index')) $active = "dashboard";
-           $view->with(['types' => $types, 'active' => $active]);
+
+           $view->with(['types' => $types, 'active' => $active, 'searchbar' => $searchbar]);
         });
 
 
@@ -59,6 +63,7 @@ class ViewService extends ServiceProvider
         view()->composer(['front.show'], function($view) {
             $backlink = null;
             if(Route::is('show'))  $backlink = strtolower(request()->route()->parameters["post"]->post_type) . "s";
+            if (Auth::check()) $backlink = 'post.index';
             $view->with(['backlink' => $backlink]);
         });
     }

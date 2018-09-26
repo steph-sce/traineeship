@@ -65,8 +65,7 @@ class FrontController extends Controller
         $categories = Category::all();
         foreach ($categories as $category) {
 
-            if(strpos(strtolower($category->name), $search) === false) {
-                //@TODO : Change for stripos
+            if(stripos($category->name, $search) === false) {
                 $posts = Post::published()->$type()
                     ->where('title', 'like', '%' . $search . '%')
                     ->paginate($paginate);

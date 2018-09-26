@@ -28,7 +28,7 @@ class PostTableSeeder extends Seeder
             'name' => 'Soft skills'
         ]);
 
-        factory(App\Post::class, 100)->create()->each(function($post){
+        factory(App\Post::class, 40)->create()->each(function($post){
             $link = str_random(12) . '.jpg';
             $file = file_get_contents('https://picsum.photos/2500/2500?image=' . rand(1,40));
             Storage::disk('local')->put($link, $file);

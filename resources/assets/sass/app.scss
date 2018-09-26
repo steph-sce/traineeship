@@ -70,6 +70,9 @@
     left : 85px;
     text-align: left;
   }
+  .card-image-container {
+    margin-bottom: 1rem;
+  }
 }
 
 @media(min-width: 992px){
@@ -77,6 +80,9 @@
     position: absolute;
     bottom: 1rem;
     right: 1rem;
+  }
+  #contact-infos {
+    padding: 0 0.75rem 0 0;
   }
 }
 
@@ -101,6 +107,23 @@ main {
   flex : 1 0 auto;
 }
 
+
+.pb6 {
+  padding-bottom: 6rem!important;
+}
+
+#contact-title {
+  text-transform: uppercase;
+}
+
+#social img {
+  padding: 0;
+}
+
+.bold {
+  font-weight: 600;
+}
+
 footer.page-footer {
   color : #A3A3A3;
   background-color: #292929;
@@ -110,6 +133,19 @@ footer.page-footer {
 
 .link-container {
   position: relative;
+}
+
+#chips-container {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#categories-container {
+  padding: 0;
+}
+
+#categories {
+  width: 100% !important;
 }
 
 .datepicker-date-display {
@@ -154,6 +190,13 @@ ul.browser-default li {
   padding: 0;
 }
 
+#search {
+  color : white;
+}
+#search:focus {
+  color : black;
+}
+
 .back-button-container {
   width: 100%;
   text-align: right;
@@ -191,6 +234,7 @@ ul.browser-default li {
   border-bottom: 1px solid rgba(0,0,0,0.2);
   padding-bottom: 1rem;
   position: relative;
+  text-transform: uppercase;
 }
 
 .card-header span div.chip {
@@ -298,12 +342,8 @@ tr.clikable-row td.center a{
   min-width: 145px;
 }
 
-.action-button.red {
+.action-button.red, .delete-item {
   background-color: #c64622!important;
-}
-
-.card-image-container {
-  margin-bottom: 1rem;
 }
 
 .remove-container {
@@ -323,6 +363,13 @@ tr.clikable-row td.center a{
   text-transform: uppercase;
 }
 
+
+//scroll to top button
+
+#myBtn {
+  display: none; /* Hidden by default */
+  margin-right: 4rem;
+}
 
 // Floating Action Button animation on scroll
 

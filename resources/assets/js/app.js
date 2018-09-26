@@ -8,7 +8,7 @@
 require('./bootstrap');
 require('materialize-css');
 
-window.Vue = require('vue');
+// window.Vue = require('vue');
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -20,4 +20,12 @@ window.Vue = require('vue');
 //
 // const app = new Vue({
 //     el: '#app'
+// });
+
+
+// Vue.component('list-item', require('./components/ListItem.vue'))
+// Vue.component('table-item', require('./components/TableItem.vue'))
+
+// const app = new Vue({
+//     el : '#app'
 // });

@@ -35,9 +35,13 @@ Route::post('/contact', 'MailController@sendContactMail')->name('sendContactMail
 
 // ------------- Routes du back -------------
 Route::resource('admin/post', 'PostController')->middleware('auth');
-Route::get('admin/post/trash/{post}', 'PostController@setTrash')->middleware('auth')->name('trash');
 Route::get('admin/post/draft/{post}', 'PostController@setDraft')->middleware('auth')->name('draft');
+Route::get('admin/post/trash/{post}', 'PostController@setTrash')->middleware('auth')->name('trash');
 Route::get('admin/trash', 'PostController@showTrash')->middleware('auth')->name('showTrash');
+Route::get('admin/masstrash', 'PostController@massTrash')->middleware('auth')->name('massTrash');
+Route::get('admin/massdelete', 'PostController@massDelete')->middleware('auth')->name('massDelete');
+Route::get('admin/massrestore', 'PostController@restore')->middleware('auth')->name('restore');
+
 // ------------------------------------------
 
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Post;
 use App\Category;
+use Route;
 
 class SearchController extends Controller
 {
@@ -12,15 +13,23 @@ class SearchController extends Controller
     {
         $paginate = $request->paginate ?? 10;
         $search = $request->search ?? null;
+        $from = $request->from ?? null;
         $trashed = Post::trash()->count();
 
         if($search !== null) {
-            $posts = $this->checkAdminCategories($paginate, $search);
+            $posts = $this->checkAdminCategories($paginate, $search, $from);
         } else {
-            $posts = Post::notTrash()
-                ->where('title', 'like', '%' . $search . "%")
-                ->orWhere('post_type' , 'like', '%' . $search . '%')
-                ->paginate($paginate);
+            if($from === route('post.index')) {
+                $posts = Post::where('title', 'like', '%' . $search . "%")
+                    ->orWhere('post_type' , 'like', '%' . $search . '%')
+                    ->notTrash()
+                    ->paginate($paginate);
+            } else {
+                $posts = Post::where('title', 'like', '%' . $search . "%")
+                    ->orWhere('post_type' , 'like', '%' . $search . '%')
+                    ->trash()
+                    ->paginate($paginate);
+            }
         }
 
 
@@ -72,8 +81,7 @@ class SearchController extends Controller
         $categories = Category::all();
         foreach ($categories as $category) {
 
-            if(strpos(strtolower($category->name), $search) === false) {
-                //@TODO : Change for stripos
+            if(stripos($category->name, $search) === false) {
                 $posts = Post::published()->$type()
                     ->where('title', 'like', '%' . $search . '%')
                     ->paginate($paginate);
@@ -86,19 +94,31 @@ class SearchController extends Controller
 
     }
 
-    private function checkAdminCategories($paginate, $search)
+    private function checkAdminCategories($paginate, $search, $from)
     {
         $categories = Category::all();
         foreach ($categories as $category) {
+            if(stripos($category->name, $search) === false) {
+                if($from === route('post.index')) {
+                    $posts = Post::where('title', 'LIKE', '%' . $search . '%')
+                        ->orWhere('status' , 'LIKE', '%' . $search . '%')
+                        ->orWhere('post_type', 'LIKE', '%' . $search . '%')
+                        ->notTrash()
+                        ->paginate($paginate);
+                } else {
+                    $posts = Post::where('title', 'LIKE', '%' . $search . '%')
+                        ->orWhere('status' , 'LIKE', '%' . $search . '%')
+                        ->orWhere('post_type', 'LIKE', '%' . $search . '%')
+                        ->trash()
+                        ->paginate($paginate);
+                }
 
-            if(strpos(strtolower($category->name), $search) === false) {
-                //@TODO : Change for stripos
-                $posts = Post::where('title', 'like', '%' . $search . '%')
-                    ->orWhere('status' , 'LIKE', '%' . $search . '%')
-                    ->orWhere('post_type', 'LIKE', '%' . $search . '%')
-                    ->paginate($paginate);
             } else {
-                return Category::find($category->id)->posts()->paginate($paginate);
+                if($from === route('post.index')) {
+                    return Category::find($category->id)->posts()->notTrash()->paginate($paginate);
+                } else {
+                    return Category::find($category->id)->posts()->trash()->paginate($paginate);
+                }
             }
         }
 

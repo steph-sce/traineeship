@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Post;
 
 class Picture extends Model
 {
@@ -12,6 +13,7 @@ class Picture extends Model
         'title'
     ];
     public function post() {
-        return $this->belongsTo(Book::class);
+        return $this->belongsTo(Post::class);
     }
+
 }
